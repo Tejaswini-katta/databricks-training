@@ -1,30 +1,29 @@
 # Day 1 - SQL Practice
 
 ## 📚 Topics Learned
-
-* Introduction to SQL
-* SELECT statements
-* WHERE clause
-* Basic filtering
+* Introduction to SQL and Database Schema
+* Basic CRUD-style SELECT operations
+* String pattern matching (LIKE, CHAR_LENGTH, SUBSTR)
+* Date-based filtering and arithmetic (YEAR, MONTH, ADDDATE)
+* Aggregate functions (SUM, AVG, MIN, MAX, COUNT)
+* Data grouping and filtering (GROUP BY, HAVING)
 
 ## 🛠️ Practice Work
-
-* Created tables using datacreation.sql
-* Executed basic queries in DB Fiddle
-* Practiced SELECT and filtering queries
+* Initialized database schema using custom `datacreation.sql`
+* Executed and verified 30+ SQL queries using DB Fiddle
+* Established a structured GitHub repository for version control
+* Documented query results and verified output accuracy against schema
 
 ## 💡 Learnings
-
-* Understood how to retrieve data from tables
-* Learned basic SQL syntax
-* Got familiar with query execution
+* Gained proficiency in SQL syntax and logical filtering
+* Mastered the `GROUP BY` and `HAVING` clause workflow for aggregate data
+* Learned how to troubleshoot syntax errors and interpret empty result sets
+* Developed a structured approach to documenting data engineering practice
 
 ## ⚠️ Challenges Faced
-
-* Initial confusion with syntax
-* Understanding table structure
+* Initial adjustment to SQL syntax and function naming conventions
+* Debugging nested aggregate function syntax
 
 ## 📌 Tools Used
-
-* DB Fiddle
-* GitHub
+* **DB Fiddle:** For real-time query execution and schema testing
+* **GitHub:** For repository management and progress documentation
