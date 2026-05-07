@@ -1,44 +1,31 @@
 # Databricks Training Repository
 
-## 👩‍💻 Name
+👩‍💻 Name: Katta Venkata Tejaswini  
+📚 Course: Databricks Training (Data Engineering)
 
-Katta Venkata Tejaswini
+## About This Repository
+This repository contains my daily practice, assignments, and learning progress as part of the Databricks Training program. It includes SQL practice, data engineering concepts, and hands-on exercises.
 
-## 📚 Course
+## Repository Structure
+- Week-wise organization
+- Each week contains daily practice folders such as `day1`, `day2`, and so on
+- Each day includes:
+  - SQL scripts
+  - Query solutions
+  - Outputs
+  - README explaining the learning
 
-Databricks Training (Data Engineering)
+## Tools & Technologies Used
+- SQL
+- Databricks
+- DB Fiddle for practice
+- GitHub for version control
 
-## 📌 About This Repository
+## Learning Goals
+- Understand SQL fundamentals
+- Work with the Databricks environment
+- Practice data transformation and queries
+- Build strong data engineering basics
 
-This repository contains my daily practice, assignments, and learning progress as part of the Databricks Training program.
-It includes SQL practice, data engineering concepts, and hands-on exercises.
-
-## 🗂️ Repository Structure
-
-* **Week-wise organization**
-
-  * Each week contains daily practice folders (Day1, Day2, etc.)
-  * Each day includes:
-
-    * SQL scripts
-    * Query solutions
-    * Outputs
-    * README explaining learning
-
-## 🛠️ Tools & Technologies Used
-
-* SQL
-* Databricks
-* DB Fiddle (for practice)
-* GitHub (version control)
-
-## 🎯 Learning Goals
-
-* Understand SQL fundamentals
-* Work with Databricks environment
-* Practice data transformation and queries
-* Build strong data engineering basics
-
-## 📅 Progress
-
-* Week 1: SQL Basics (In Progress)
+## Progress
+- Week 1: SQL Basics (In Progress)
