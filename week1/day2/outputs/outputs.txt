@@ -292,3 +292,119 @@ There are no results to be displayed.
 | IT              | 65000.0    |
 
 ---
+
+**Query #46**
+
+    SELECT name, salary
+    FROM Employee
+    WHERE salary = (
+        SELECT MAX(salary)
+        FROM Employee
+    );
+
+| name      | salary  |
+| --------- | ------- |
+| Bob Brown | 80000.0 |
+
+---
+
+**Query #47**
+
+    SELECT name,salary FROM Employee
+    WHERE salary>(
+      SELECT AVG(salary)
+      FROM Employee
+    );
+
+| name        | salary  |
+| ----------- | ------- |
+| Jane Smith  | 60000.0 |
+| Bob Brown   | 80000.0 |
+| David Green | 70000.0 |
+| Grace Kelly | 65000.0 |
+
+---
+
+**Query #48**
+
+    SELECT salary
+    FROM Employee
+    WHERE salary<(
+      SELECT MAX(salary)
+      FROM Employee
+    )
+    ORDER BY salary DESC
+    LIMIT 1;
+
+| salary  |
+| ------- |
+| 70000.0 |
+
+---
+
+**Query #49**
+
+    SELECT department_id,COUNT(*) AS employee_count
+    FROM Employee
+    GROUP BY department_id
+    ORDER BY employee_count DESC
+    LIMIT 1;
+
+| department_id | employee_count |
+| ------------- | -------------- |
+| 1             | 3              |
+
+---
+
+**Query #50**
+
+    SELECT E1.name
+    FROM Employee E1
+    WHERE E1.salary > (
+        SELECT AVG(E2.salary)
+        FROM Employee E2
+        WHERE E2.department_id = E1.department_id
+    );
+
+| name        |
+| ----------- |
+| Jane Smith  |
+| Bob Brown   |
+| David Green |
+| Eve Black   |
+
+---
+
+**Query #51**
+
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 2;
+
+| salary  |
+| ------- |
+| 65000.0 |
+
+---
+
+**Query #52**
+
+    SELECT *
+    FROM Employee E1
+    WHERE E1.age > ALL (
+        SELECT E2.age
+        FROM Employee E2
+        JOIN Department D
+        ON E2.department_id = D.department_id
+        WHERE D.name = 'HR'
+    );
+
+| emp_id | name        | age | salary  | department_id | hire_date  |
+| ------ | ----------- | --- | ------- | ------------- | ---------- |
+| 3      | Bob Brown   | 45  | 80000.0 | 1             | 2018-02-12 |
+| 6      | David Green | 38  | 70000.0 | 4             | 2022-05-18 |
+| 7      | Eve Black   | 40  | 55000.0 | 3             | 2021-08-30 |
+
+---
+
