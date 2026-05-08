@@ -54,3 +54,7 @@ FROM enrollments e
 LEFT JOIN students s ON e.student_id = s.student_id
 LEFT JOIN courses c ON e.course_id = c.course_id
 LEFT JOIN instructors i ON c.instructor_id = i.instructor_id;
+-- Bonus Challenge: Write a query that lists every student and every course, even if there is no enrollment relationship between them.
+SELECT s.student_name, c.course_name
+FROM students s
+CROSS JOIN courses c;
