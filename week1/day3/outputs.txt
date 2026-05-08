@@ -170,3 +170,50 @@
 
 ---
 
+**Query #Bonus challenge**
+
+    SELECT s.student_name, c.course_name
+    FROM students s
+    CROSS JOIN courses c;
+
+| student_name  | course_name         |
+| ------------- | ------------------- |
+| Alice Johnson | SQL Basics          |
+| Bob Smith     | SQL Basics          |
+| Charlie Brown | SQL Basics          |
+| Diana Prince  | SQL Basics          |
+| Ethan Hunt    | SQL Basics          |
+| Fiona Green   | SQL Basics          |
+| Alice Johnson | Python Fundamentals |
+| Bob Smith     | Python Fundamentals |
+| Charlie Brown | Python Fundamentals |
+| Diana Prince  | Python Fundamentals |
+| Ethan Hunt    | Python Fundamentals |
+| Fiona Green   | Python Fundamentals |
+| Alice Johnson | Data Analytics      |
+| Bob Smith     | Data Analytics      |
+| Charlie Brown | Data Analytics      |
+| Diana Prince  | Data Analytics      |
+| Ethan Hunt    | Data Analytics      |
+| Fiona Green   | Data Analytics      |
+| Alice Johnson | Cloud Computing     |
+| Bob Smith     | Cloud Computing     |
+| Charlie Brown | Cloud Computing     |
+| Diana Prince  | Cloud Computing     |
+| Ethan Hunt    | Cloud Computing     |
+| Fiona Green   | Cloud Computing     |
+| Alice Johnson | Machine Learning    |
+| Bob Smith     | Machine Learning    |
+| Charlie Brown | Machine Learning    |
+| Diana Prince  | Machine Learning    |
+| Ethan Hunt    | Machine Learning    |
+| Fiona Green   | Machine Learning    |
+| Alice Johnson | Cyber Security      |
+| Bob Smith     | Cyber Security      |
+| Charlie Brown | Cyber Security      |
+| Diana Prince  | Cyber Security      |
+| Ethan Hunt    | Cyber Security      |
+| Fiona Green   | Cyber Security      |
+
+---
+
