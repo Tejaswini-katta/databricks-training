@@ -1,7 +1,7 @@
 # SQL Practice - Day 3
 
-This folder contains SQL practice for Day 3 focused on join operations and unmatched row analysis in relational tables.[1]
-It includes the starter schema, query solutions, and output results for a SQL joins assignment based on an online learning platform dataset.[1]
+This folder contains SQL practice for Day 3 focused on join operations and unmatched row analysis in relational tables.
+It includes the starter schema, query solutions, and output results for a SQL joins assignment based on an online learning platform dataset.
 
 ## Topics Covered
 
