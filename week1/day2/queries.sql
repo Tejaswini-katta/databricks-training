@@ -88,3 +88,61 @@ GROUP BY D.department_id,D.name
 ORDER BY avg_salary DESC
 LIMIT 1;
 
+-- Query 46: Select the employee with the highest salary
+SELECT name, salary
+FROM Employee
+WHERE salary = (
+    SELECT MAX(salary)
+    FROM Employee
+);
+
+-- Query 47: Select employees whose salary is above the average salary
+SELECT name,salary FROM Employee
+WHERE salary>(
+  SELECT AVG(salary)
+  FROM Employee
+);
+
+-- Query 48: Select the second highest salary from the employee table
+SELECT salary
+FROM Employee
+WHERE salary<(
+  SELECT MAX(salary)
+  FROM Employee
+)
+ORDER BY salary DESC
+LIMIT 1;
+
+-- Query 49: Select the department with the most employees
+SELECT department_id,COUNT(*) AS employee_count
+FROM Employee
+GROUP BY department_id
+ORDER BY employee_count DESC
+LIMIT 1;
+
+-- Query 50: Select employees who earn more than average salary of their department
+SELECT E1.name
+FROM Employee E1
+WHERE E1.salary > (
+    SELECT AVG(E2.salary)
+    FROM Employee E2
+    WHERE E2.department_id = E1.department_id
+);
+
+-- Query 51: Select the nth highest salary (for example, 3rd highest)
+SELECT DISTINCT salary
+FROM Employee
+ORDER BY salary DESC
+LIMIT 1 OFFSET 2;
+
+-- Query 52: Select employees who are older than all employees in HR department
+SELECT *
+FROM Employee E1
+WHERE E1.age > ALL (
+    SELECT E2.age
+    FROM Employee E2
+    JOIN Department D
+    ON E2.department_id = D.department_id
+    WHERE D.name = 'HR'
+);
+
