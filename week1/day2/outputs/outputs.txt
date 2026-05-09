@@ -408,3 +408,211 @@ There are no results to be displayed.
 
 ---
 
+**Query #53**
+
+    SELECT department_id,AVG(salary) AS avg_salary
+    FROM Employee
+    GROUP BY department_id
+    HAVING avg_salary>55000;
+
+| department_id | avg_salary |
+| ------------- | ---------- |
+| 1             | 65000.0    |
+| 4             | 61500.0    |
+
+---
+
+**Query #54**
+
+    SELECT E.name
+    FROM Employee E
+    WHERE E.department_id IN (
+        SELECT P.department_id
+        FROM Project P
+        GROUP BY P.department_id
+        HAVING COUNT(*) >= 2
+    );
+
+| name        |
+| ----------- |
+| John Doe    |
+| Bob Brown   |
+| Alice Blue  |
+| David Green |
+| Eve Black   |
+| Grace Kelly |
+| Hannah Lee  |
+
+---
+
+**Query #55**
+
+    SELECT E.name
+    FROM Employee E
+    WHERE E.hire_date = (
+        SELECT hire_date
+        FROM Employee
+        WHERE name = 'Jane Smith'
+    );
+
+| name       |
+| ---------- |
+| Jane Smith |
+
+---
+
+**Query #56**
+
+    SELECT SUM(salary) AS total_salary FROM Employee
+    WHERE YEAR(hire_date)=2020;
+
+| total_salary |
+| ------------ |
+| 103000.0     |
+
+---
+
+**Query #57**
+
+    SELECT department_id,AVG(salary) AS avg_salary
+    FROM Employee 
+    GROUP BY department_id
+    ORDER BY avg_salary DESC
+
+| department_id | avg_salary |
+| ------------- | ---------- |
+| 1             | 65000.0    |
+| 4             | 61500.0    |
+| 2             | 55000.0    |
+| 3             | 50000.0    |
+|               | 48000.0    |
+
+---
+
+**Query #58**
+
+    SELECT department_id,AVG(salary) AS avg_salary
+    FROM Employee
+    GROUP BY department_id
+    HAVING COUNT(*)>1 AND avg_salary>55000
+
+| department_id | avg_salary |
+| ------------- | ---------- |
+| 1             | 65000.0    |
+| 4             | 61500.0    |
+
+---
+
+**Query #59**
+
+    SELECT * FROM Employee
+    WHERE hire_date >= DATE_SUB(CURDATE(),INTERVAL 2 YEAR) 
+    ORDER BY hire_date;
+
+There are no results to be displayed.
+
+---
+
+**Query #60**
+
+    SELECT department_id,COUNT(*) AS employee_count, AVG(salary) AS avg_salary
+    FROM Employee
+    GROUP BY department_id
+    HAVING COUNT(*)>2;
+
+| department_id | employee_count | avg_salary |
+| ------------- | -------------- | ---------- |
+| 1             | 3              | 65000.0    |
+
+---
+
+**Query #61**
+    
+    SELECT name,salary
+    FROM Employee
+    WHERE salary>(
+      SELECT AVG(salary)
+      FROM Employee
+      WHERE department_id = Employee.department_id
+    );
+
+| name        | salary  |
+| ----------- | ------- |
+| Jane Smith  | 60000.0 |
+| Bob Brown   | 80000.0 |
+| David Green | 70000.0 |
+| Grace Kelly | 65000.0 |
+
+---
+
+**Query #62**
+
+    SELECT name
+    FROM Employee
+    WHERE hire_date = (
+        SELECT MIN(hire_date)
+        FROM Employee
+    );
+
+| name      |
+| --------- |
+| Bob Brown |
+
+---
+
+**Query #63**
+
+    SELECT d.name AS department_name, COUNT(p.project_id) AS total_projects
+    FROM Department d
+    JOIN Project p ON d.department_id = p.department_id
+    GROUP BY d.department_id, d.name
+    ORDER BY total_projects;
+
+| department_name | total_projects |
+| --------------- | -------------- |
+| HR              | 1              |
+| Marketing       | 2              |
+| Finance         | 2              |
+| IT              | 3              |
+
+---
+
+**Query #64**
+
+    SELECT e.department_id, e.name, e.salary AS highest_salary
+    FROM Employee e
+    WHERE e.salary = (
+        SELECT MAX(salary)
+        FROM Employee
+        WHERE department_id = e.department_id
+    );
+
+| department_id | name        | highest_salary |
+| ------------- | ----------- | -------------- |
+| 2             | Jane Smith  | 60000.0        |
+| 1             | Bob Brown   | 80000.0        |
+| 4             | David Green | 70000.0        |
+| 3             | Eve Black   | 55000.0        |
+
+---
+
+**Query #65**
+
+    SELECT e.name AS employee_name, e.salary
+    FROM Employee e
+    WHERE e.age > (
+        SELECT AVG(age)
+        FROM Employee
+        WHERE department_id = e.department_id
+    );
+
+| employee_name | salary  |
+| ------------- | ------- |
+| Jane Smith    | 60000.0 |
+| Bob Brown     | 80000.0 |
+| David Green   | 70000.0 |
+| Eve Black     | 55000.0 |
+
+---
+
+
