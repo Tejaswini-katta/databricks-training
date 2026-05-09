@@ -146,3 +146,89 @@ WHERE E1.age > ALL (
     WHERE D.name = 'HR'
 );
 
+-- Query 53: Select departments where the average salary is greater than 55000
+SELECT department_id,AVG(salary) AS avg_salary
+FROM Employee
+GROUP BY department_id
+HAVING avg_salary>55000;
+
+-- Query 54: Select employees who work in a department with atleast 2 projects
+SELECT E.name
+FROM Employee E
+WHERE E.department_id IN (
+    SELECT P.department_id
+    FROM Project P
+    GROUP BY P.department_id
+    HAVING COUNT(*) >= 2
+);
+
+-- Query 55: Select employees who were hired on the same day as 'Jane smith'
+SELECT E.name
+FROM Employee E
+WHERE E.hire_date = (
+    SELECT hire_date
+    FROM Employee
+    WHERE name = 'Jane Smith'
+);
+
+--- COMBINED MODERATE DIFFICULTY QUERIES
+-- Query 56: Select the total salary of employees hired in the year 2020
+SELECT SUM(salary) AS total_salary 
+FROM Employee
+WHERE YEAR(hire_date)=2020;
+-- Query 57: Select the average salary of the employees in each department , ordered by the average salary in descending order
+SELECT department_id,AVG(salary) AS avg_salary
+FROM Employee 
+GROUP BY department_id
+ORDER BY avg_salary DESC
+-- Query 58: Select departments with more than 1 employee and an average salary greater than 55000
+SELECT department_id,AVG(salary) AS avg_salary
+FROM Employee
+GROUP BY department_id
+HAVING COUNT(*)>1 AND avg_salary>55000
+-- Query 59: Select employees hired in the last 2 years , ordered by their hired date
+SELECT * FROM Employee
+WHERE hire_date >= DATE_SUB(CURDATE(),INTERVAL 2 YEAR) 
+ORDER BY hire_date;
+-- Query 60: Select the total number of employees and the average salary for departments with more than 2 employees
+SELECT department_id,COUNT(*) AS employee_count, AVG(salary) AS avg_salary
+FROM Employee
+GROUP BY department_id
+HAVING COUNT(*)>2;
+-- Query 61: Select the name and salary of employees whose salary is above the average salary of their department
+SELECT name,salary
+FROM Employee
+WHERE salary>(
+  SELECT AVG(salary)
+  FROM Employee
+  WHERE department_id = Employee.department_id
+);
+-- Query 62: Select the names of employees who are hired on the same date as the oldest employee in the company
+SELECT name
+FROM Employee
+WHERE hire_date = (
+    SELECT MIN(hire_date)
+    FROM Employee
+);
+-- Query 63: Select the department names along with the total number of projects they are working on,ordered by the number of projects
+SELECT d.name AS department_name, COUNT(p.project_id) AS total_projects
+FROM Department d
+JOIN Project p ON d.department_id = p.department_id
+GROUP BY d.department_id, d.name
+ORDER BY total_projects;
+-- Query 64: Select the employee name with the highest salary in each department
+SELECT e.department_id, e.name, e.salary AS highest_salary
+FROM Employee e
+WHERE e.salary = (
+    SELECT MAX(salary)
+    FROM Employee
+    WHERE department_id = e.department_id
+);
+-- Query 65: Select the names and salaries of employees who are older than the average age of employees in their department
+SELECT e.name AS employee_name, e.salary
+FROM Employee e
+WHERE e.age > (
+    SELECT AVG(age)
+    FROM Employee
+    WHERE department_id = e.department_id
+);
