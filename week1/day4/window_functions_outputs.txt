@@ -1,0 +1,200 @@
+**Query #1**
+
+    SELECT e.*,ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num
+    FROM employees e;
+
+| employee_id | employee_name | department | manager_id | salary  | hire_date  | row_num |
+| ----------- | ------------- | ---------- | ---------- | ------- | ---------- | ------- |
+| 4           | Diana Prince  | IT         | 3          | 95000.0 | 2018-11-11 | 1       |
+| 3           | Charlie Brown | IT         |            | 90000.0 | 2019-07-01 | 2       |
+| 7           | George Miller | Finance    |            | 85000.0 | 2017-09-18 | 3       |
+| 8           | Hannah Lee    | Finance    | 7          | 82000.0 | 2021-08-30 | 4       |
+| 1           | Alice Johnson | Sales      |            | 70000.0 | 2020-01-15 | 5       |
+| 2           | Bob Smith     | Sales      | 1          | 65000.0 | 2021-03-20 | 6       |
+| 5           | Ethan Hunt    | HR         |            | 60000.0 | 2022-02-10 | 7       |
+| 6           | Fiona Green   | HR         | 5          | 58000.0 | 2023-05-12 | 8       |
+
+---
+
+**Query #2**
+
+    SELECT employee_name,salary,RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employees;
+
+| employee_name | salary  | salary_rank |
+| ------------- | ------- | ----------- |
+| Diana Prince  | 95000.0 | 1           |
+| Charlie Brown | 90000.0 | 2           |
+| George Miller | 85000.0 | 3           |
+| Hannah Lee    | 82000.0 | 4           |
+| Alice Johnson | 70000.0 | 5           |
+| Bob Smith     | 65000.0 | 6           |
+| Ethan Hunt    | 60000.0 | 7           |
+| Fiona Green   | 58000.0 | 8           |
+
+---
+
+**Query #3**
+
+    SELECT employee_name,salary,DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employees;
+
+| employee_name | salary  | salary_rank |
+| ------------- | ------- | ----------- |
+| Diana Prince  | 95000.0 | 1           |
+| Charlie Brown | 90000.0 | 2           |
+| George Miller | 85000.0 | 3           |
+| Hannah Lee    | 82000.0 | 4           |
+| Alice Johnson | 70000.0 | 5           |
+| Bob Smith     | 65000.0 | 6           |
+| Ethan Hunt    | 60000.0 | 7           |
+| Fiona Green   | 58000.0 | 8           |
+
+---
+
+**Query #4**
+
+    SELECT employee_id,employee_name,salary
+    FROM(
+      SELECT employee_id,employee_name,salary,ROW_NUMBER() OVER (ORDER     BY salary DESC) AS rn  FROM employees
+    ) AS t
+    WHERE rn<=3;
+
+| employee_id | employee_name | salary  |
+| ----------- | ------------- | ------- |
+| 4           | Diana Prince  | 95000.0 |
+| 3           | Charlie Brown | 90000.0 |
+| 7           | George Miller | 85000.0 |
+
+---
+
+**Query #5**
+
+    SELECT *,
+           RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS salary_rank
+    FROM employees;
+
+| employee_id | employee_name | department | manager_id | salary  | hire_date  | salary_rank |
+| ----------- | ------------- | ---------- | ---------- | ------- | ---------- | ----------- |
+| 7           | George Miller | Finance    |            | 85000.0 | 2017-09-18 | 1           |
+| 8           | Hannah Lee    | Finance    | 7          | 82000.0 | 2021-08-30 | 2           |
+| 5           | Ethan Hunt    | HR         |            | 60000.0 | 2022-02-10 | 1           |
+| 6           | Fiona Green   | HR         | 5          | 58000.0 | 2023-05-12 | 2           |
+| 4           | Diana Prince  | IT         | 3          | 95000.0 | 2018-11-11 | 1           |
+| 3           | Charlie Brown | IT         |            | 90000.0 | 2019-07-01 | 2           |
+| 1           | Alice Johnson | Sales      |            | 70000.0 | 2020-01-15 | 1           |
+| 2           | Bob Smith     | Sales      | 1          | 65000.0 | 2021-03-20 | 2           |
+
+---
+
+**Query #6**
+
+    SELECT employee_id,employee_name,department,salary
+    FROM (
+      SELECT employee_id,employee_name,department,salary,
+        RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rn 
+      FROM employees
+    ) AS t
+    WHERE rn=1;
+
+| employee_id | employee_name | department | salary  |
+| ----------- | ------------- | ---------- | ------- |
+| 7           | George Miller | Finance    | 85000.0 |
+| 5           | Ethan Hunt    | HR         | 60000.0 |
+| 4           | Diana Prince  | IT         | 95000.0 |
+| 1           | Alice Johnson | Sales      | 70000.0 |
+
+---
+
+**Query #7**
+
+    SELECT order_id, order_date, total_amount,
+           SUM(total_amount) OVER (ORDER BY order_date) AS running_total
+    FROM orders;
+
+| order_id | order_date | total_amount | running_total |
+| -------- | ---------- | ------------ | ------------- |
+| 101      | 2024-01-10 | 500.0        | 500.0         |
+| 102      | 2024-01-11 | 700.0        | 1200.0        |
+| 103      | 2024-01-15 | 1200.0       | 2400.0        |
+| 104      | 2024-01-18 | 300.0        | 2700.0        |
+| 105      | 2024-01-20 | 900.0        | 3600.0        |
+| 106      | 2024-01-25 | 1500.0       | 5100.0        |
+| 107      | 2024-02-01 | 650.0        | 5750.0        |
+| 108      | 2024-02-05 | 1100.0       | 6850.0        |
+| 109      | 2024-02-10 | 400.0        | 7250.0        |
+| 110      | 2024-02-15 | 950.0        | 8200.0        |
+| 111      | 2024-02-20 | 2000.0       | 10200.0       |
+| 112      | 2024-02-25 | 750.0        | 10950.0       |
+
+---
+
+**Query #8**
+
+    SELECT employee_id, order_id, order_date, total_amount,
+    SUM(total_amount) OVER (PARTITION BY employee_id ORDER BY order_date) AS cumulative_sales
+    FROM orders;
+
+| employee_id | order_id | order_date | total_amount | cumulative_sales |
+| ----------- | -------- | ---------- | ------------ | ---------------- |
+| 1           | 101      | 2024-01-10 | 500.0        | 500.0            |
+| 1           | 103      | 2024-01-15 | 1200.0       | 1700.0           |
+| 1           | 107      | 2024-02-01 | 650.0        | 2350.0           |
+| 1           | 111      | 2024-02-20 | 2000.0       | 4350.0           |
+| 2           | 102      | 2024-01-11 | 700.0        | 700.0            |
+| 2           | 106      | 2024-01-25 | 1500.0       | 2200.0           |
+| 2           | 110      | 2024-02-15 | 950.0        | 3150.0           |
+| 3           | 104      | 2024-01-18 | 300.0        | 300.0            |
+| 3           | 108      | 2024-02-05 | 1100.0       | 1400.0           |
+| 4           | 105      | 2024-01-20 | 900.0        | 900.0            |
+| 4           | 109      | 2024-02-10 | 400.0        | 1300.0           |
+| 4           | 112      | 2024-02-25 | 750.0        | 2050.0           |
+
+---
+
+**Query #9**
+
+    SELECT customer_id,order_id,order_date,total_amount, LAG(total_amount) OVER (PARTITION BY customer_id ORDER BY order_date) AS prev_order_amount
+    FROM orders
+    ORDER BY customer_id,order_date;
+
+| customer_id | order_id | order_date | total_amount | prev_order_amount |
+| ----------- | -------- | ---------- | ------------ | ----------------- |
+| 1           | 101      | 2024-01-10 | 500.0        |                   |
+| 1           | 103      | 2024-01-15 | 1200.0       | 500.0             |
+| 1           | 108      | 2024-02-05 | 1100.0       | 1200.0            |
+| 1           | 112      | 2024-02-25 | 750.0        | 1100.0            |
+| 2           | 102      | 2024-01-11 | 700.0        |                   |
+| 2           | 107      | 2024-02-01 | 650.0        | 700.0             |
+| 3           | 104      | 2024-01-18 | 300.0        |                   |
+| 3           | 109      | 2024-02-10 | 400.0        | 300.0             |
+| 4           | 105      | 2024-01-20 | 900.0        |                   |
+| 4           | 110      | 2024-02-15 | 950.0        | 900.0             |
+| 5           | 106      | 2024-01-25 | 1500.0       |                   |
+| 5           | 111      | 2024-02-20 | 2000.0       | 1500.0            |
+
+---
+
+**Query #10**
+
+    SELECT customer_id,order_id,order_date,total_amount, LEAD(total_amount) OVER (PARTITION BY customer_id ORDER BY order_date) AS next_order_amount
+    FROM orders
+    ORDER BY customer_id,order_date;
+
+| customer_id | order_id | order_date | total_amount | next_order_amount |
+| ----------- | -------- | ---------- | ------------ | ----------------- |
+| 1           | 101      | 2024-01-10 | 500.0        | 1200.0            |
+| 1           | 103      | 2024-01-15 | 1200.0       | 1100.0            |
+| 1           | 108      | 2024-02-05 | 1100.0       | 750.0             |
+| 1           | 112      | 2024-02-25 | 750.0        |                   |
+| 2           | 102      | 2024-01-11 | 700.0        | 650.0             |
+| 2           | 107      | 2024-02-01 | 650.0        |                   |
+| 3           | 104      | 2024-01-18 | 300.0        | 400.0             |
+| 3           | 109      | 2024-02-10 | 400.0        |                   |
+| 4           | 105      | 2024-01-20 | 900.0        | 950.0             |
+| 4           | 110      | 2024-02-15 | 950.0        |                   |
+| 5           | 106      | 2024-01-25 | 1500.0       | 2000.0            |
+| 5           | 111      | 2024-02-20 | 2000.0       |                   |
+
+---
+
