@@ -419,4 +419,46 @@
 | 8           | Hannah Lee    | Finance    | 82000.0 | 8               |
 
 ---
+**Query #21**
+
+    -- Query 21: Create a CTE to calculate total sales per employee
+    WITH employee_sales AS(
+      SELECT employee_id,SUM(total_amount) AS total_sales
+      FROM orders
+      GROUP BY employee_id
+    )
+    SELECT * FROM employee_sales;
+
+| employee_id | total_sales |
+| ----------- | ----------- |
+| 1           | 4350.0      |
+| 2           | 3150.0      |
+| 3           | 1400.0      |
+| 4           | 2050.0      |
+
+---
+    
+**Query #22**
+
+    -- Query 22: Use a CTE to find employees whose sales exceed the company average.
+    WITH employee_sales AS(
+      SELECT employee_id,SUM(total_amount) AS total_sales
+      FROM orders
+      GROUP BY employee_id
+    ),
+    company_avg AS (
+        SELECT AVG(total_sales) AS avg_sales
+        FROM employee_sales
+    )
+    SELECT es.employee_id, es.total_sales
+    FROM employee_sales es
+    CROSS JOIN company_avg c
+    WHERE es.total_sales > c.avg_sales;
+
+| employee_id | total_sales |
+| ----------- | ----------- |
+| 1           | 4350.0      |
+| 2           | 3150.0      |
+
+---
 
