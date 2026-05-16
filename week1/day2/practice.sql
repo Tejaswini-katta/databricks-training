@@ -312,4 +312,272 @@
 | Sales      | 2              |
 
 ---
+**Schema (MySQL v8)**
 
+    CREATE TABLE Employees ( 
+    emp_id INT, 
+    emp_name VARCHAR(50), 
+    department VARCHAR(50), 
+    salary INT, 
+    city VARCHAR(50), 
+    experience INT 
+    ); 
+    INSERT INTO Employees VALUES 
+    (101, 'Rahul', 'IT', 75000, 'Hyderabad', 5), 
+    (102, 'Anjali', 'HR', 45000, 'Chennai', 3), 
+    (103, 'Kiran', 'IT', 82000, 'Bangalore', 6), 
+    (104, 'Sneha', 'Finance', 67000, 'Hyderabad', 4), 
+    (105, 'Aman', 'HR', 39000, 'Pune', 2), 
+    (106, 'Ravi', 'Finance', 91000, 'Mumbai', 8), 
+    (107, 'Divya', 'IT', 55000, 'Chennai', 3), 
+    (108, 'Meena', 'Sales', 48000, 'Bangalore', 2), 
+    (109, 'Arjun', 'Sales', 61000, 'Hyderabad', 5), 
+    (110, 'Pooja', 'IT', 73000, 'Mumbai', 4), 
+    (111, 'Vikas', 'HR', 52000, 'Pune', 3), 
+    (112, 'Nisha', 'Finance', 88000, 'Bangalore', 7), 
+    (113, 'Tarun', 'Sales', 46000, 'Chennai', 2), 
+    (114, 'Kavya', 'IT', 97000, 'Hyderabad', 9), 
+    (115, 'Manoj', 'Finance', 58000, 'Mumbai', 4); 
+
+---
+
+-- HAVING 
+**Query #1**
+
+    -- Find departments having more than 3 employees. 
+    SELECT department,COUNT(*) AS emp_count
+    FROM Employees
+    GROUP BY department
+    HAVING emp_count>3;
+
+| department | emp_count |
+| ---------- | --------- |
+| IT         | 5         |
+| Finance    | 4         |
+
+---
+**Query #2**
+
+    -- Find departments where average salary is greater than 60000. 
+    SELECT department,AVG(salary) AS avg_salary
+    FROM Employees
+    GROUP BY department
+    HAVING avg_salary > 60000;
+
+| department | avg_salary |
+| ---------- | ---------- |
+| IT         | 76400.0    |
+| Finance    | 76000.0    |
+
+---
+**Query #3**
+
+    -- Find cities having more than 2 employees. 
+    SELECT city,COUNT(*) AS emp_count
+    FROM Employees
+    GROUP BY city
+    HAVING emp_count>2;
+
+| city      | emp_count |
+| --------- | --------- |
+| Hyderabad | 4         |
+| Chennai   | 3         |
+| Bangalore | 3         |
+| Mumbai    | 3         |
+
+---
+**Query #4**
+
+    -- Find departments where total salary is greater than 200000. 
+    SELECT department,SUM(salary) AS sum_salary
+    FROM Employees
+    GROUP BY department
+    HAVING sum_salary>200000;
+
+| department | sum_salary |
+| ---------- | ---------- |
+| IT         | 382000     |
+| Finance    | 304000     |
+
+---
+**Query #5**
+
+    -- Find departments where maximum salary is above 90000. 
+    SELECT department,MAX(salary) AS max_salary
+    FROM Employees
+    GROUP BY department
+    HAVING max_salary>90000;
+
+| department | max_salary |
+| ---------- | ---------- |
+| IT         | 97000      |
+| Finance    | 91000      |
+
+---
+-- TOP
+**Query #1**
+
+    -- Display top 5 highest paid employees. 
+    SELECT * 
+    FROM Employees
+    ORDER BY salary DESC
+    LIMIT 5;
+
+| emp_id | emp_name | department | salary | city      | experience |
+| ------ | -------- | ---------- | ------ | --------- | ---------- |
+| 114    | Kavya    | IT         | 97000  | Hyderabad | 9          |
+| 106    | Ravi     | Finance    | 91000  | Mumbai    | 8          |
+| 112    | Nisha    | Finance    | 88000  | Bangalore | 7          |
+| 103    | Kiran    | IT         | 82000  | Bangalore | 6          |
+| 101    | Rahul    | IT         | 75000  | Hyderabad | 5          |
+
+---
+**Query #2**
+
+    -- Display top 3 employees with highest experience. 
+    SELECT * 
+    FROM Employees
+    ORDER BY experience DESC
+    LIMIT 3;
+
+| emp_id | emp_name | department | salary | city      | experience |
+| ------ | -------- | ---------- | ------ | --------- | ---------- |
+| 114    | Kavya    | IT         | 97000  | Hyderabad | 9          |
+| 106    | Ravi     | Finance    | 91000  | Mumbai    | 8          |
+| 112    | Nisha    | Finance    | 88000  | Bangalore | 7          |
+
+---
+**Query #3**
+
+    -- Display top 2 salaries from Finance department. 
+    SELECT department,salary
+    FROM Employees
+    WHERE department='Finance'
+    ORDER BY salary DESC
+    LIMIT 2;
+
+| department | salary |
+| ---------- | ------ |
+| Finance    | 91000  |
+| Finance    | 88000  |
+
+---
+**Query #4**
+
+    -- Display top 4 employees from Hyderabad.
+    SELECT * 
+    FROM Employees
+    WHERE city='Hyderabad'
+    ORDER BY salary DESC
+    LIMIT 4;
+
+| emp_id | emp_name | department | salary | city      | experience |
+| ------ | -------- | ---------- | ------ | --------- | ---------- |
+| 114    | Kavya    | IT         | 97000  | Hyderabad | 9          |
+| 101    | Rahul    | IT         | 75000  | Hyderabad | 5          |
+| 104    | Sneha    | Finance    | 67000  | Hyderabad | 4          |
+| 109    | Arjun    | Sales      | 61000  | Hyderabad | 5          |
+
+---
+**Query #5**
+
+    -- Display top 1 highest salary employee.
+    SELECT * FROM Employees
+    ORDER BY salary DESC
+    LIMIT 1;
+
+| emp_id | emp_name | department | salary | city      | experience |
+| ------ | -------- | ---------- | ------ | --------- | ---------- |
+| 114    | Kavya    | IT         | 97000  | Hyderabad | 9          |
+
+---
+-- DISTINCT 
+**Query #1**
+
+    -- Display distinct department names. 
+    SELECT DISTINCT department FROM Employees;
+
+| department |
+| ---------- |
+| IT         |
+| HR         |
+| Finance    |
+| Sales      |
+
+---
+**Query #2**
+
+    -- Display distinct city names. 
+    SELECT DISTINCT city FROM Employees;
+
+| city      |
+| --------- |
+| Hyderabad |
+| Chennai   |
+| Bangalore |
+| Pune      |
+| Mumbai    |
+
+---
+**Query #3**
+
+    -- Display distinct salary values. 
+    SELECT DISTINCT salary FROM Employees;
+
+| salary |
+| ------ |
+| 75000  |
+| 45000  |
+| 82000  |
+| 67000  |
+| 39000  |
+| 91000  |
+| 55000  |
+| 48000  |
+| 61000  |
+| 73000  |
+| 52000  |
+| 88000  |
+| 46000  |
+| 97000  |
+| 58000  |
+
+---
+**Query #4**
+
+    -- Display distinct combinations of department and city.
+    SELECT DISTINCT department,city FROM Employees;
+
+| department | city      |
+| ---------- | --------- |
+| IT         | Hyderabad |
+| HR         | Chennai   |
+| IT         | Bangalore |
+| Finance    | Hyderabad |
+| HR         | Pune      |
+| Finance    | Mumbai    |
+| IT         | Chennai   |
+| Sales      | Bangalore |
+| Sales      | Hyderabad |
+| IT         | Mumbai    |
+| Finance    | Bangalore |
+| Sales      | Chennai   |
+
+---
+**Query #5**
+
+    -- Display distinct experience values.
+    SELECT DISTINCT experience FROM Employees;
+
+| experience |
+| ---------- |
+| 5          |
+| 3          |
+| 6          |
+| 4          |
+| 2          |
+| 8          |
+| 7          |
+| 9          |
+
+---
