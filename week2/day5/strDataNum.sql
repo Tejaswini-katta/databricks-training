@@ -149,3 +149,245 @@
 
 [View on DB Fiddle](https://www.db-fiddle.com/)
 
+
+
+
+**Schema (MySQL v5.7)**
+
+    CREATE TABLE customer_spending (
+    
+    cust_id INT,
+    
+    cust_name VARCHAR(50),
+    
+    city VARCHAR(30),
+    
+    purchase_amount DECIMAL(10,2),
+    
+    purchase_date DATE
+    
+    );
+    
+    
+    
+    INSERT INTO customer_spending VALUES
+    
+    (1,'amit','mumbai',12000.75,'2024-12-01'),
+    
+    (2,'neha','delhi',8500.40,'2024-12-15'),
+    
+    (3,'rohit','mumbai',15500.90,'2024-11-20'),
+    
+    (4,'kavya','chennai',6000.10,'2024-10-05');
+    
+
+---
+
+**Query #3**
+
+    SELECT
+        cust_id,
+    
+        /* First letter capitalized */
+        CONCAT(
+            UPPER(LEFT(cust_name,1)),
+            LOWER(SUBSTRING(cust_name,2))
+        ) AS customer_name,
+    
+        city,
+    
+        /* Month name of purchase */
+        MONTHNAME(purchase_date) AS purchase_month,
+    
+        /* Rounded purchase amount */
+        ROUND(purchase_amount) AS rounded_amount,
+    
+        /* Absolute value */
+        ABS(purchase_amount) AS absolute_amount,
+    
+        /* Spending classification */
+        CASE
+            WHEN purchase_amount > 15000
+                THEN 'High Spender'
+    
+            WHEN purchase_amount BETWEEN 8000 AND 15000
+                THEN 'Medium Spender'
+    
+            ELSE 'Low Spender'
+        END AS spender_category
+    
+    FROM customer_spending;
+
+| cust_id | customer_name | city    | purchase_month | rounded_amount | absolute_amount | spender_category |
+| ------- | ------------- | ------- | -------------- | -------------- | --------------- | ---------------- |
+| 1       | Amit          | mumbai  | December       | 12001          | 12000.75        | Medium Spender   |
+| 2       | Neha          | delhi   | December       | 8500           | 8500.4          | Medium Spender   |
+| 3       | Rohit         | mumbai  | November       | 15501          | 15500.9         | High Spender     |
+| 4       | Kavya         | chennai | October        | 6000           | 6000.1          | Low Spender      |
+
+---
+
+[View on DB Fiddle](https://www.db-fiddle.com/)
+
+
+
+
+
+**Schema (MySQL v5.7)**
+
+    CREATE TABLE subscriptions (
+    
+    user_id INT,
+    
+    user_email VARCHAR(100),
+    
+    start_date DATE,
+    
+    end_date DATE,
+    
+    subscription_fee DECIMAL(10,2)
+    
+    );
+    
+    
+    
+    INSERT INTO subscriptions VALUES
+    
+    (1,'karthik@gmail.com','2024-01-01','2025-01-01',12000.50),
+    
+    (2,'veena@yahoo.com','2024-06-15','2024-12-15',8500.75),
+    
+    (3,'ravi@hotmail.com','2023-03-01','2024-03-01',15000.90);
+    
+    
+
+---
+
+**Query #4**
+
+    SELECT
+        user_id,
+        user_email,
+    
+        /* Extract email domain */
+        SUBSTRING_INDEX(user_email, '@', -1) AS email_domain,
+    
+        /* Subscription duration in months */
+        TIMESTAMPDIFF(MONTH, start_date, end_date) AS subscription_duration_months,
+    
+        /* Format fee with commas */
+        FORMAT(subscription_fee, 2) AS formatted_fee,
+    
+        /* Remaining days from today */
+        DATEDIFF(end_date, CURDATE()) AS remaining_days,
+    
+        /* Subscription status */
+        CASE
+            WHEN end_date < CURDATE()
+                THEN 'Expired'
+    
+            WHEN DATEDIFF(end_date, CURDATE()) <= 30
+                THEN 'Expiring Soon'
+    
+            ELSE 'Active'
+        END AS subscription_status
+    
+    FROM subscriptions;
+
+| user_id | user_email        | email_domain | subscription_duration_months | formatted_fee | remaining_days | subscription_status |
+| ------- | ----------------- | ------------ | ---------------------------- | ------------- | -------------- | ------------------- |
+| 1       | karthik@gmail.com | gmail.com    | 12                           | 12,000.50     | -501           | Expired             |
+| 2       | veena@yahoo.com   | yahoo.com    | 6                            | 8,500.75      | -518           | Expired             |
+| 3       | ravi@hotmail.com  | hotmail.com  | 12                           | 15,000.90     | -807           | Expired             |
+
+---
+
+[View on DB Fiddle](https://www.db-fiddle.com/)
+
+
+
+
+
+**Schema (MySQL v5.7)**
+
+    
+    CREATE TABLE loan_details (
+    
+    loan_id INT,
+    
+    customer_name VARCHAR(50),
+    
+    loan_amount DECIMAL(12,2),
+    
+    interest_rate DECIMAL(5,2),
+    
+    loan_start DATE
+    
+    );
+    
+    
+    
+    INSERT INTO loan_details VALUES
+    
+    (201,'suresh',500000.75,8.5,'2022-01-10'),
+    
+    (202,'mahesh',750000.40,9.2,'2021-05-20'),
+    
+    (203,'anita',300000.90,7.8,'2023-07-01');
+    
+    
+    
+
+---
+
+**Query #5**
+
+    SELECT
+        loan_id,
+    
+        /* Uppercase customer name */
+        UPPER(customer_name) AS customer_name_upper,
+    
+        loan_amount,
+        interest_rate,
+        loan_start,
+    
+        /* Monthly interest using POWER function */
+        ROUND(
+            loan_amount * POWER((1 + interest_rate / 100), 1.0 / 12) 
+            - loan_amount,
+            2
+        ) AS monthly_interest,
+    
+        /* Years since loan start */
+        TIMESTAMPDIFF(YEAR, loan_start, CURDATE()) AS years_since_loan_start,
+    
+        /* Approx EMI calculation */
+        ROUND(
+            (loan_amount * (interest_rate / 100 / 12)) /
+            (1 - POWER(1 + (interest_rate / 100 / 12), -60))
+        ) AS emi,
+    
+        /* Risk classification */
+        CASE
+            WHEN interest_rate > 9
+                THEN 'High Risk'
+    
+            WHEN interest_rate BETWEEN 8 AND 9
+                THEN 'Medium Risk'
+    
+            ELSE 'Low Risk'
+        END AS risk_category
+    
+    FROM loan_details;
+
+| loan_id | customer_name_upper | loan_amount | interest_rate | loan_start | monthly_interest | years_since_loan_start | emi   | risk_category |
+| ------- | ------------------- | ----------- | ------------- | ---------- | ---------------- | ---------------------- | ----- | ------------- |
+| 201     | SURESH              | 500000.75   | 8.5           | 2022-01-10 | 3410.75          | 4                      | 10258 | Medium Risk   |
+| 202     | MAHESH              | 750000.4    | 9.2           | 2021-05-20 | 5520.9           | 4                      | 15642 | High Risk     |
+| 203     | ANITA               | 300000.9    | 7.8           | 2023-07-01 | 1883.58          | 2                      | 6054  | Low Risk      |
+
+---
+
+[View on DB Fiddle](https://www.db-fiddle.com/)
+
