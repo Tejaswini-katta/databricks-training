@@ -66,3 +66,86 @@
 ---
 
 [View on DB Fiddle](https://www.db-fiddle.com/)---
+
+
+
+
+
+    
+
+**Schema (MySQL v5.7)**
+
+    CREATE TABLE orders_delivery (
+    
+    order_id INT,
+    
+    customer_name VARCHAR(50),
+    
+    order_date DATE,
+    
+    delivery_date DATE,
+    
+    order_amount DECIMAL(10,2)
+    
+    );
+    
+    
+    
+    INSERT INTO orders_delivery VALUES
+    
+    (101,'rajesh','2025-01-01','2025-01-05',12500.75),
+    
+    (102,'meena','2025-01-10','2025-01-10',8400.40),
+    
+    (103,'arun','2025-01-15','2025-01-20',15600.90),
+    
+    (104,'pooja','2025-01-18',NULL,9200.10);
+    
+    
+
+---
+
+**Query #2**
+
+    SELECT
+      order_id,
+    
+      UPPER(customer_name) AS customer_name_upper,
+    
+      order_date,
+      delivery_date,
+    
+      DATEDIFF(
+          COALESCE(delivery_date, CURDATE()),
+          order_date
+      ) AS delivery_days,
+    
+      COALESCE(delivery_date, CURDATE()) AS deliverydate_fixed,
+    
+      TRUNCATE(order_amount, 1) AS orderamount_truncated,
+    
+      CASE
+          WHEN delivery_date IS NULL THEN 'Pending'
+    
+          WHEN DATEDIFF(delivery_date, order_date) = 0
+               THEN 'Same-day'
+    
+          WHEN DATEDIFF(delivery_date, order_date) >= 3
+               THEN 'Delayed'
+    
+          ELSE 'On-time'
+      END AS delivery_status
+    
+    FROM orders_delivery;
+
+| order_id | customer_name_upper | order_date | delivery_date | delivery_days | deliverydate_fixed | orderamount_truncated | delivery_status |
+| -------- | ------------------- | ---------- | ------------- | ------------- | ------------------ | --------------------- | --------------- |
+| 101      | RAJESH              | 2025-01-01 | 2025-01-05    | 4             | 2025-01-05         | 12500.7               | Delayed         |
+| 102      | MEENA               | 2025-01-10 | 2025-01-10    | 0             | 2025-01-10         | 8400.4                | Same-day        |
+| 103      | ARUN                | 2025-01-15 | 2025-01-20    | 5             | 2025-01-20         | 15600.9               | Delayed         |
+| 104      | POOJA               | 2025-01-18 |               | 484           | 2026-05-17         | 9200.1                | Pending         |
+
+---
+
+[View on DB Fiddle](https://www.db-fiddle.com/)
+
