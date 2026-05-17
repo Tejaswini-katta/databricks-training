@@ -735,3 +735,623 @@ There are no results to be displayed.
 
 ---
 
+
+**Query #31**
+
+    -- 31. Assign a row number to students ordered by CGPA.
+    SELECT s.*,ROW_NUMBER() OVER(ORDER BY s.cgpa DESC) AS rn
+    FROM Student s;
+
+| student_id | student_name     | gender | city          | admission_year | department_id | cgpa | rn  |
+| ---------- | ---------------- | ------ | ------------- | -------------- | ------------- | ---- | --- |
+| 109        | Tony Stark       | Male   | Malibu        | 2019           | 1             | 9.8  | 1   |
+| 105        | Bruce Wayne      | Male   | Gotham        | 2019           | 3             | 9.5  | 2   |
+| 102        | Mary Jane        | Female | Chicago       | 2020           | 1             | 9.1  | 3   |
+| 114        | Jean Grey        | Female | New York      | 2020           | 6             | 8.8  | 4   |
+| 101        | John Doe         | Male   | New York      | 2021           | 1             | 8.7  | 5   |
+| 107        | Diana Prince     | Female | Washington    | 2022           | 4             | 8.4  | 6   |
+| 104        | Natasha Romanoff | Female | Boston        | 2021           | 2             | 8.0  | 7   |
+| 115        | Logan Howlett    | Male   | Denver        | 2022           | 7             | 7.7  | 8   |
+| 103        | Steve Rogers     | Male   | Dallas        | 2022           | 2             | 7.5  | 9   |
+| 110        | Wanda Maximoff   | Female | Chicago       | 2022           | 5             | 7.2  | 10  |
+| 106        | Clark Kent       | Male   | Metropolis    | 2020           | 3             | 6.9  | 11  |
+| 111        | Barry Allen      | Male   |               | 2023           | 5             | 6.5  | 12  |
+| 113        | Scott Lang       | Male   | San Francisco | 2021           |               | 5.8  | 13  |
+| 108        | Peter Parker     | Male   | Queens        | 2021           | 4             |      | 14  |
+| 112        |                  | Female | Seattle       | 2023           |               |      | 15  |
+
+---
+**Query #32**
+
+    -- 32. Rank students based on their CGPA.
+    SELECT S.*,RANK() OVER(ORDER BY S.cgpa DESC) AS student_rank
+    FROM Student S;
+
+| student_id | student_name     | gender | city          | admission_year | department_id | cgpa | student_rank |
+| ---------- | ---------------- | ------ | ------------- | -------------- | ------------- | ---- | ------------ |
+| 109        | Tony Stark       | Male   | Malibu        | 2019           | 1             | 9.8  | 1            |
+| 105        | Bruce Wayne      | Male   | Gotham        | 2019           | 3             | 9.5  | 2            |
+| 102        | Mary Jane        | Female | Chicago       | 2020           | 1             | 9.1  | 3            |
+| 114        | Jean Grey        | Female | New York      | 2020           | 6             | 8.8  | 4            |
+| 101        | John Doe         | Male   | New York      | 2021           | 1             | 8.7  | 5            |
+| 107        | Diana Prince     | Female | Washington    | 2022           | 4             | 8.4  | 6            |
+| 104        | Natasha Romanoff | Female | Boston        | 2021           | 2             | 8.0  | 7            |
+| 115        | Logan Howlett    | Male   | Denver        | 2022           | 7             | 7.7  | 8            |
+| 103        | Steve Rogers     | Male   | Dallas        | 2022           | 2             | 7.5  | 9            |
+| 110        | Wanda Maximoff   | Female | Chicago       | 2022           | 5             | 7.2  | 10           |
+| 106        | Clark Kent       | Male   | Metropolis    | 2020           | 3             | 6.9  | 11           |
+| 111        | Barry Allen      | Male   |               | 2023           | 5             | 6.5  | 12           |
+| 113        | Scott Lang       | Male   | San Francisco | 2021           |               | 5.8  | 13           |
+| 108        | Peter Parker     | Male   | Queens        | 2021           | 4             |      | 14           |
+| 112        |                  | Female | Seattle       | 2023           |               |      | 14           |
+
+---
+**Query #33**
+
+    -- 33. Display dense rank of staff salaries.
+    SELECT s.*,DENSE_RANK() OVER(ORDER BY s.salary DESC) AS salary_rank
+    FROM Staff s;
+
+| staff_id | staff_name    | designation         | salary   | hire_date  | department_id | salary_rank |
+| -------- | ------------- | ------------------- | -------- | ---------- | ------------- | ----------- |
+| 7        | Grace Miller  | HOD                 | 120000.0 | 2010-02-28 | 4             | 1           |
+| 5        | Eva Green     | Professor           | 99000.0  | 2013-11-05 | 3             | 2           |
+| 10       | Ivy Clark     | Professor           | 98000.0  | 2012-04-17 |               | 3           |
+| 1        | Alice Johnson | Professor           | 95000.0  | 2015-06-12 | 1             | 4           |
+| 3        | Charlie Brown | Professor           | 91000.0  | 2014-03-21 | 2             | 5           |
+| 2        | Bob Smith     | Associate Professor | 82000.0  | 2017-09-01 | 1             | 6           |
+| 9        | Henry Ford    | Assistant Professor | 65000.0  |            | 5             | 7           |
+| 4        | David Lee     | Lecturer            | 55000.0  | 2020-07-15 | 2             | 8           |
+| 8        |               | Lecturer            | 50000.0  | 2022-08-18 |               | 9           |
+| 6        | Frank Hall    | Lecturer            |          | 2021-01-12 | 3             | 10          |
+
+---
+**Query #34**
+
+    -- 34. Find the top 3 highest scoring students using window functions.
+    SELECT *
+    FROM(
+      SELECT s.*,ROW_NUMBER() OVER(ORDER BY s.cgpa DESC) AS rn
+      FROM Student s
+    ) AS ranked_students
+    WHERE rn<=3;
+
+| student_id | student_name | gender | city    | admission_year | department_id | cgpa | rn  |
+| ---------- | ------------ | ------ | ------- | -------------- | ------------- | ---- | --- |
+| 109        | Tony Stark   | Male   | Malibu  | 2019           | 1             | 9.8  | 1   |
+| 105        | Bruce Wayne  | Male   | Gotham  | 2019           | 3             | 9.5  | 2   |
+| 102        | Mary Jane    | Female | Chicago | 2020           | 1             | 9.1  | 3   |
+
+---
+**Query #35**
+
+    -- 35. Display running total of marks for each student.
+    SELECT s.student_id,s.student_name,SUM(m.marks) AS total_marks
+    FROM Student s
+    LEFT JOIN Mark m
+    ON s.student_id=m.student_id
+    GROUP BY s.student_id,s.student_name;
+
+| student_id | student_name     | total_marks |
+| ---------- | ---------------- | ----------- |
+| 101        | John Doe         | 254         |
+| 102        | Mary Jane        | 184         |
+| 103        | Steve Rogers     | 138         |
+| 104        | Natasha Romanoff | 81          |
+| 105        | Bruce Wayne      | 192         |
+| 106        | Clark Kent       | 115         |
+| 107        | Diana Prince     | 87          |
+| 108        | Peter Parker     |             |
+| 109        | Tony Stark       | 196         |
+| 110        | Wanda Maximoff   | 71          |
+| 111        | Barry Allen      | 65          |
+| 112        |                  |             |
+| 113        | Scott Lang       | 44          |
+| 114        | Jean Grey        | 90          |
+| 115        | Logan Howlett    | 73          |
+
+---
+**Query #36**
+
+    -- 36. Find the average marks for each subject using window functions.
+    SELECT DISTINCT s.subject_id,s.subject_name,
+      AVG(m.marks) OVER(PARTITION BY s.subject_id) AS avg_marks
+    FROM Subject s
+    LEFT JOIN Mark m
+    ON s.subject_id=m.subject_id;
+
+| subject_id | subject_name            | avg_marks |
+| ---------- | ----------------------- | --------- |
+| 201        | Database Systems        | 93.25     |
+| 202        | Operating Systems       | 82.0      |
+| 203        | Machine Design          | 73.5      |
+| 204        | Thermodynamics          | 72.0      |
+| 205        | Digital Electronics     | 76.0      |
+| 206        | Signals and Systems     | 77.5      |
+| 207        | Structural Engineering  | 87.0      |
+| 208        | Linear Algebra          | 75.3333   |
+| 209        |                         | 73.0      |
+| 210        | Artificial Intelligence | 70.5      |
+
+---
+**Query #37**
+
+    -- 37. Display previous exam marks for each student using LAG().
+    SELECT
+        m.student_id,
+        s.student_name,
+        m.subject_id,
+        sub.subject_name,
+        m.exam_type,
+        m.exam_date,
+        m.marks,
+        LAG(m.marks) OVER (
+            PARTITION BY m.student_id
+            ORDER BY m.exam_date
+        ) AS previous_marks
+    FROM Mark m
+    JOIN Student s
+        ON m.student_id = s.student_id
+    JOIN Subject sub
+        ON m.subject_id = sub.subject_id;
+
+| student_id | student_name     | subject_id | subject_name            | exam_type | exam_date  | marks | previous_marks |
+| ---------- | ---------------- | ---------- | ----------------------- | --------- | ---------- | ----- | -------------- |
+| 101        | John Doe         | 201        | Database Systems        | Mid       | 2024-03-10 | 88    |                |
+| 101        | John Doe         | 202        | Operating Systems       | Mid       | 2024-03-11 | 75    | 88             |
+| 101        | John Doe         | 201        | Database Systems        | Final     | 2024-05-10 | 91    | 75             |
+| 102        | Mary Jane        | 201        | Database Systems        | Mid       | 2024-03-10 | 95    |                |
+| 102        | Mary Jane        | 202        | Operating Systems       | Final     | 2024-05-11 | 89    | 95             |
+| 103        | Steve Rogers     | 203        | Machine Design          | Mid       | 2024-03-09 | 66    |                |
+| 103        | Steve Rogers     | 204        | Thermodynamics          | Final     | 2024-05-12 | 72    | 66             |
+| 104        | Natasha Romanoff | 203        | Machine Design          | Final     | 2024-05-12 | 81    |                |
+| 105        | Bruce Wayne      | 205        | Digital Electronics     | Mid       | 2024-03-14 | 98    |                |
+| 105        | Bruce Wayne      | 206        | Signals and Systems     | Final     | 2024-05-14 | 94    | 98             |
+| 106        | Clark Kent       | 205        | Digital Electronics     | Mid       | 2024-03-14 | 54    |                |
+| 106        | Clark Kent       | 206        | Signals and Systems     | Final     | 2024-05-14 | 61    | 54             |
+| 107        | Diana Prince     | 207        | Structural Engineering  | Mid       | 2024-03-16 | 87    |                |
+| 108        | Peter Parker     | 207        | Structural Engineering  | Final     | 2024-05-16 |       |                |
+| 109        | Tony Stark       | 210        | Artificial Intelligence | Mid       | 2024-03-20 | 97    |                |
+| 109        | Tony Stark       | 201        | Database Systems        | Final     | 2024-05-10 | 99    | 97             |
+| 110        | Wanda Maximoff   | 208        | Linear Algebra          | Mid       | 2024-03-18 | 71    |                |
+| 111        | Barry Allen      | 208        | Linear Algebra          | Final     | 2024-05-18 | 65    |                |
+| 112        |                  | 209        |                         | Mid       | 2024-03-21 |       |                |
+| 113        | Scott Lang       | 210        | Artificial Intelligence | Final     | 2024-05-20 | 44    |                |
+| 114        | Jean Grey        | 208        | Linear Algebra          | Mid       | 2024-03-18 | 90    |                |
+| 115        | Logan Howlett    | 209        |                         | Final     | 2024-05-22 | 73    |                |
+
+---
+**Query #38**
+
+    -- 38. Display next exam marks for each student using LEAD().
+    SELECT
+        m.student_id,
+        s.student_name,
+        m.subject_id,
+        sub.subject_name,
+        m.exam_type,
+        m.exam_date,
+        m.marks,
+        LEAD(m.marks) OVER (
+            PARTITION BY m.student_id
+            ORDER BY m.exam_date
+        ) AS next_marks
+    FROM Mark m
+    JOIN Student s
+        ON m.student_id = s.student_id
+    JOIN Subject sub
+        ON m.subject_id = sub.subject_id;
+
+| student_id | student_name     | subject_id | subject_name            | exam_type | exam_date  | marks | next_marks |
+| ---------- | ---------------- | ---------- | ----------------------- | --------- | ---------- | ----- | ---------- |
+| 101        | John Doe         | 201        | Database Systems        | Mid       | 2024-03-10 | 88    | 75         |
+| 101        | John Doe         | 202        | Operating Systems       | Mid       | 2024-03-11 | 75    | 91         |
+| 101        | John Doe         | 201        | Database Systems        | Final     | 2024-05-10 | 91    |            |
+| 102        | Mary Jane        | 201        | Database Systems        | Mid       | 2024-03-10 | 95    | 89         |
+| 102        | Mary Jane        | 202        | Operating Systems       | Final     | 2024-05-11 | 89    |            |
+| 103        | Steve Rogers     | 203        | Machine Design          | Mid       | 2024-03-09 | 66    | 72         |
+| 103        | Steve Rogers     | 204        | Thermodynamics          | Final     | 2024-05-12 | 72    |            |
+| 104        | Natasha Romanoff | 203        | Machine Design          | Final     | 2024-05-12 | 81    |            |
+| 105        | Bruce Wayne      | 205        | Digital Electronics     | Mid       | 2024-03-14 | 98    | 94         |
+| 105        | Bruce Wayne      | 206        | Signals and Systems     | Final     | 2024-05-14 | 94    |            |
+| 106        | Clark Kent       | 205        | Digital Electronics     | Mid       | 2024-03-14 | 54    | 61         |
+| 106        | Clark Kent       | 206        | Signals and Systems     | Final     | 2024-05-14 | 61    |            |
+| 107        | Diana Prince     | 207        | Structural Engineering  | Mid       | 2024-03-16 | 87    |            |
+| 108        | Peter Parker     | 207        | Structural Engineering  | Final     | 2024-05-16 |       |            |
+| 109        | Tony Stark       | 210        | Artificial Intelligence | Mid       | 2024-03-20 | 97    | 99         |
+| 109        | Tony Stark       | 201        | Database Systems        | Final     | 2024-05-10 | 99    |            |
+| 110        | Wanda Maximoff   | 208        | Linear Algebra          | Mid       | 2024-03-18 | 71    |            |
+| 111        | Barry Allen      | 208        | Linear Algebra          | Final     | 2024-05-18 | 65    |            |
+| 112        |                  | 209        |                         | Mid       | 2024-03-21 |       |            |
+| 113        | Scott Lang       | 210        | Artificial Intelligence | Final     | 2024-05-20 | 44    |            |
+| 114        | Jean Grey        | 208        | Linear Algebra          | Mid       | 2024-03-18 | 90    |            |
+| 115        | Logan Howlett    | 209        |                         | Final     | 2024-05-22 | 73    |            |
+
+---
+**Query #39**
+
+    -- 39. Find the highest marks within each subject using MAX() OVER().
+    SELECT
+        m.student_id,
+        s.student_name,
+        m.subject_id,
+        sub.subject_name,
+        m.exam_type,
+        m.exam_date,
+        m.marks,
+        MAX(m.marks) OVER (
+            PARTITION BY m.subject_id
+        ) AS highest_marks
+    FROM Mark m
+    JOIN Student s
+        ON m.student_id = s.student_id
+    JOIN Subject sub
+        ON m.subject_id = sub.subject_id;
+
+| student_id | student_name     | subject_id | subject_name            | exam_type | exam_date  | marks | highest_marks |
+| ---------- | ---------------- | ---------- | ----------------------- | --------- | ---------- | ----- | ------------- |
+| 101        | John Doe         | 201        | Database Systems        | Mid       | 2024-03-10 | 88    | 99            |
+| 102        | Mary Jane        | 201        | Database Systems        | Mid       | 2024-03-10 | 95    | 99            |
+| 109        | Tony Stark       | 201        | Database Systems        | Final     | 2024-05-10 | 99    | 99            |
+| 101        | John Doe         | 201        | Database Systems        | Final     | 2024-05-10 | 91    | 99            |
+| 101        | John Doe         | 202        | Operating Systems       | Mid       | 2024-03-11 | 75    | 89            |
+| 102        | Mary Jane        | 202        | Operating Systems       | Final     | 2024-05-11 | 89    | 89            |
+| 103        | Steve Rogers     | 203        | Machine Design          | Mid       | 2024-03-09 | 66    | 81            |
+| 104        | Natasha Romanoff | 203        | Machine Design          | Final     | 2024-05-12 | 81    | 81            |
+| 103        | Steve Rogers     | 204        | Thermodynamics          | Final     | 2024-05-12 | 72    | 72            |
+| 105        | Bruce Wayne      | 205        | Digital Electronics     | Mid       | 2024-03-14 | 98    | 98            |
+| 106        | Clark Kent       | 205        | Digital Electronics     | Mid       | 2024-03-14 | 54    | 98            |
+| 106        | Clark Kent       | 206        | Signals and Systems     | Final     | 2024-05-14 | 61    | 94            |
+| 105        | Bruce Wayne      | 206        | Signals and Systems     | Final     | 2024-05-14 | 94    | 94            |
+| 107        | Diana Prince     | 207        | Structural Engineering  | Mid       | 2024-03-16 | 87    | 87            |
+| 108        | Peter Parker     | 207        | Structural Engineering  | Final     | 2024-05-16 |       | 87            |
+| 110        | Wanda Maximoff   | 208        | Linear Algebra          | Mid       | 2024-03-18 | 71    | 90            |
+| 111        | Barry Allen      | 208        | Linear Algebra          | Final     | 2024-05-18 | 65    | 90            |
+| 114        | Jean Grey        | 208        | Linear Algebra          | Mid       | 2024-03-18 | 90    | 90            |
+| 112        |                  | 209        |                         | Mid       | 2024-03-21 |       | 73            |
+| 115        | Logan Howlett    | 209        |                         | Final     | 2024-05-22 | 73    | 73            |
+| 109        | Tony Stark       | 210        | Artificial Intelligence | Mid       | 2024-03-20 | 97    | 97            |
+| 113        | Scott Lang       | 210        | Artificial Intelligence | Final     | 2024-05-20 | 44    | 97            |
+
+---
+**Query #40**
+
+    -- 40. Display cumulative average marks ordered by exam date.
+    SELECT
+        m.student_id,
+        s.student_name,
+        m.subject_id,
+        sub.subject_name,
+        m.exam_type,
+        m.exam_date,
+        m.marks,
+        AVG(m.marks) OVER (
+            ORDER BY m.exam_date
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS cumulative_avg_marks
+    FROM Mark m
+    JOIN Student s
+        ON m.student_id = s.student_id
+    JOIN Subject sub
+        ON m.subject_id = sub.subject_id
+    ORDER BY m.exam_date;
+
+| student_id | student_name     | subject_id | subject_name            | exam_type | exam_date  | marks | cumulative_avg_marks |
+| ---------- | ---------------- | ---------- | ----------------------- | --------- | ---------- | ----- | -------------------- |
+| 103        | Steve Rogers     | 203        | Machine Design          | Mid       | 2024-03-09 | 66    | 66.0                 |
+| 101        | John Doe         | 201        | Database Systems        | Mid       | 2024-03-10 | 88    | 77.0                 |
+| 102        | Mary Jane        | 201        | Database Systems        | Mid       | 2024-03-10 | 95    | 83.0                 |
+| 101        | John Doe         | 202        | Operating Systems       | Mid       | 2024-03-11 | 75    | 81.0                 |
+| 105        | Bruce Wayne      | 205        | Digital Electronics     | Mid       | 2024-03-14 | 98    | 84.4                 |
+| 106        | Clark Kent       | 205        | Digital Electronics     | Mid       | 2024-03-14 | 54    | 79.3333              |
+| 107        | Diana Prince     | 207        | Structural Engineering  | Mid       | 2024-03-16 | 87    | 80.4286              |
+| 114        | Jean Grey        | 208        | Linear Algebra          | Mid       | 2024-03-18 | 90    | 81.625               |
+| 110        | Wanda Maximoff   | 208        | Linear Algebra          | Mid       | 2024-03-18 | 71    | 80.4444              |
+| 109        | Tony Stark       | 210        | Artificial Intelligence | Mid       | 2024-03-20 | 97    | 82.1                 |
+| 112        |                  | 209        |                         | Mid       | 2024-03-21 |       | 82.1                 |
+| 101        | John Doe         | 201        | Database Systems        | Final     | 2024-05-10 | 91    | 82.9091              |
+| 109        | Tony Stark       | 201        | Database Systems        | Final     | 2024-05-10 | 99    | 84.25                |
+| 102        | Mary Jane        | 202        | Operating Systems       | Final     | 2024-05-11 | 89    | 84.6154              |
+| 103        | Steve Rogers     | 204        | Thermodynamics          | Final     | 2024-05-12 | 72    | 83.7143              |
+| 104        | Natasha Romanoff | 203        | Machine Design          | Final     | 2024-05-12 | 81    | 83.5333              |
+| 106        | Clark Kent       | 206        | Signals and Systems     | Final     | 2024-05-14 | 61    | 82.125               |
+| 105        | Bruce Wayne      | 206        | Signals and Systems     | Final     | 2024-05-14 | 94    | 82.8235              |
+| 108        | Peter Parker     | 207        | Structural Engineering  | Final     | 2024-05-16 |       | 82.8235              |
+| 111        | Barry Allen      | 208        | Linear Algebra          | Final     | 2024-05-18 | 65    | 81.8333              |
+| 113        | Scott Lang       | 210        | Artificial Intelligence | Final     | 2024-05-20 | 44    | 79.8421              |
+| 115        | Logan Howlett    | 209        |                         | Final     | 2024-05-22 | 73    | 79.5                 |
+
+---
+**Query #41**
+
+    -- 41. Find the first student admitted in each department.
+    SELECT *
+    FROM (
+        SELECT
+            s.*,
+            ROW_NUMBER() OVER (
+                PARTITION BY s.department_id
+                ORDER BY s.admission_year ASC, s.student_id ASC
+            ) AS rn
+        FROM Student s
+    ) t
+    WHERE rn = 1;
+
+| student_id | student_name     | gender | city          | admission_year | department_id | cgpa | rn  |
+| ---------- | ---------------- | ------ | ------------- | -------------- | ------------- | ---- | --- |
+| 113        | Scott Lang       | Male   | San Francisco | 2021           |               | 5.8  | 1   |
+| 109        | Tony Stark       | Male   | Malibu        | 2019           | 1             | 9.8  | 1   |
+| 104        | Natasha Romanoff | Female | Boston        | 2021           | 2             | 8.0  | 1   |
+| 105        | Bruce Wayne      | Male   | Gotham        | 2019           | 3             | 9.5  | 1   |
+| 108        | Peter Parker     | Male   | Queens        | 2021           | 4             |      | 1   |
+| 110        | Wanda Maximoff   | Female | Chicago       | 2022           | 5             | 7.2  | 1   |
+| 114        | Jean Grey        | Female | New York      | 2020           | 6             | 8.8  | 1   |
+| 115        | Logan Howlett    | Male   | Denver        | 2022           | 7             | 7.7  | 1   |
+
+---
+**Query #42**
+
+    -- 42. Display the latest hired staff member in each department.
+    SELECT *
+    FROM (
+        SELECT
+            st.*,
+            ROW_NUMBER() OVER (
+                PARTITION BY st.department_id
+                ORDER BY st.hire_date DESC, st.staff_id DESC
+            ) AS rn
+        FROM Staff st
+    ) t
+    WHERE rn = 1;
+
+| staff_id | staff_name   | designation         | salary   | hire_date  | department_id | rn  |
+| -------- | ------------ | ------------------- | -------- | ---------- | ------------- | --- |
+| 8        |              | Lecturer            | 50000.0  | 2022-08-18 |               | 1   |
+| 2        | Bob Smith    | Associate Professor | 82000.0  | 2017-09-01 | 1             | 1   |
+| 4        | David Lee    | Lecturer            | 55000.0  | 2020-07-15 | 2             | 1   |
+| 6        | Frank Hall   | Lecturer            |          | 2021-01-12 | 3             | 1   |
+| 7        | Grace Miller | HOD                 | 120000.0 | 2010-02-28 | 4             | 1   |
+| 9        | Henry Ford   | Assistant Professor | 65000.0  |            | 5             | 1   |
+
+---
+**Query #43**
+
+    -- 43. Divide students into 4 CGPA quartiles using NTILE().
+    SELECT
+        s.*,
+        NTILE(4) OVER (
+            ORDER BY s.cgpa DESC
+        ) AS cgpa_quartile
+    FROM Student s;
+
+| student_id | student_name     | gender | city          | admission_year | department_id | cgpa | cgpa_quartile |
+| ---------- | ---------------- | ------ | ------------- | -------------- | ------------- | ---- | ------------- |
+| 109        | Tony Stark       | Male   | Malibu        | 2019           | 1             | 9.8  | 1             |
+| 105        | Bruce Wayne      | Male   | Gotham        | 2019           | 3             | 9.5  | 1             |
+| 102        | Mary Jane        | Female | Chicago       | 2020           | 1             | 9.1  | 1             |
+| 114        | Jean Grey        | Female | New York      | 2020           | 6             | 8.8  | 1             |
+| 101        | John Doe         | Male   | New York      | 2021           | 1             | 8.7  | 2             |
+| 107        | Diana Prince     | Female | Washington    | 2022           | 4             | 8.4  | 2             |
+| 104        | Natasha Romanoff | Female | Boston        | 2021           | 2             | 8.0  | 2             |
+| 115        | Logan Howlett    | Male   | Denver        | 2022           | 7             | 7.7  | 2             |
+| 103        | Steve Rogers     | Male   | Dallas        | 2022           | 2             | 7.5  | 3             |
+| 110        | Wanda Maximoff   | Female | Chicago       | 2022           | 5             | 7.2  | 3             |
+| 106        | Clark Kent       | Male   | Metropolis    | 2020           | 3             | 6.9  | 3             |
+| 111        | Barry Allen      | Male   |               | 2023           | 5             | 6.5  | 3             |
+| 113        | Scott Lang       | Male   | San Francisco | 2021           |               | 5.8  | 4             |
+| 108        | Peter Parker     | Male   | Queens        | 2021           | 4             |      | 4             |
+| 112        |                  | Female | Seattle       | 2023           |               |      | 4             |
+
+---
+**Query #44**
+
+    -- 44. Find percentage rank of students based on CGPA.
+    SELECT
+        s.*,
+        PERCENT_RANK() OVER (
+            ORDER BY s.cgpa DESC
+        ) AS pct_rank
+    FROM Student s;
+
+| student_id | student_name     | gender | city          | admission_year | department_id | cgpa | pct_rank            |
+| ---------- | ---------------- | ------ | ------------- | -------------- | ------------- | ---- | ------------------- |
+| 109        | Tony Stark       | Male   | Malibu        | 2019           | 1             | 9.8  | 0                   |
+| 105        | Bruce Wayne      | Male   | Gotham        | 2019           | 3             | 9.5  | 0.07142857142857142 |
+| 102        | Mary Jane        | Female | Chicago       | 2020           | 1             | 9.1  | 0.14285714285714285 |
+| 114        | Jean Grey        | Female | New York      | 2020           | 6             | 8.8  | 0.21428571428571427 |
+| 101        | John Doe         | Male   | New York      | 2021           | 1             | 8.7  | 0.2857142857142857  |
+| 107        | Diana Prince     | Female | Washington    | 2022           | 4             | 8.4  | 0.35714285714285715 |
+| 104        | Natasha Romanoff | Female | Boston        | 2021           | 2             | 8.0  | 0.42857142857142855 |
+| 115        | Logan Howlett    | Male   | Denver        | 2022           | 7             | 7.7  | 0.5                 |
+| 103        | Steve Rogers     | Male   | Dallas        | 2022           | 2             | 7.5  | 0.5714285714285714  |
+| 110        | Wanda Maximoff   | Female | Chicago       | 2022           | 5             | 7.2  | 0.6428571428571429  |
+| 106        | Clark Kent       | Male   | Metropolis    | 2020           | 3             | 6.9  | 0.7142857142857143  |
+| 111        | Barry Allen      | Male   |               | 2023           | 5             | 6.5  | 0.7857142857142857  |
+| 113        | Scott Lang       | Male   | San Francisco | 2021           |               | 5.8  | 0.8571428571428571  |
+| 108        | Peter Parker     | Male   | Queens        | 2021           | 4             |      | 0.9285714285714286  |
+| 112        |                  | Female | Seattle       | 2023           |               |      | 0.9285714285714286  |
+
+---
+**Query #45**
+
+    -- 45. Display cumulative distribution of salaries.
+    SELECT
+        st.*,
+        CUME_DIST() OVER (
+            ORDER BY st.salary DESC
+        ) AS cumulative_distribution
+    FROM Staff st;
+
+| staff_id | staff_name    | designation         | salary   | hire_date  | department_id | cumulative_distribution |
+| -------- | ------------- | ------------------- | -------- | ---------- | ------------- | ----------------------- |
+| 7        | Grace Miller  | HOD                 | 120000.0 | 2010-02-28 | 4             | 0.1                     |
+| 5        | Eva Green     | Professor           | 99000.0  | 2013-11-05 | 3             | 0.2                     |
+| 10       | Ivy Clark     | Professor           | 98000.0  | 2012-04-17 |               | 0.3                     |
+| 1        | Alice Johnson | Professor           | 95000.0  | 2015-06-12 | 1             | 0.4                     |
+| 3        | Charlie Brown | Professor           | 91000.0  | 2014-03-21 | 2             | 0.5                     |
+| 2        | Bob Smith     | Associate Professor | 82000.0  | 2017-09-01 | 1             | 0.6                     |
+| 9        | Henry Ford    | Assistant Professor | 65000.0  |            | 5             | 0.7                     |
+| 4        | David Lee     | Lecturer            | 55000.0  | 2020-07-15 | 2             | 0.8                     |
+| 8        |               | Lecturer            | 50000.0  | 2022-08-18 |               | 0.9                     |
+| 6        | Frank Hall    | Lecturer            |          | 2021-01-12 | 3             | 1                       |
+
+---
+**Query #46**
+
+    -- 46. Find subjects where a student's marks are above the subject average.
+    SELECT
+        m.student_id,
+        s.student_name,
+        m.subject_id,
+        sub.subject_name,
+        m.exam_type,
+        m.exam_date,
+        m.marks
+    FROM Mark m
+    JOIN Student s
+        ON m.student_id = s.student_id
+    JOIN Subject sub
+        ON m.subject_id = sub.subject_id
+    WHERE m.marks > (
+        SELECT AVG(m2.marks)
+        FROM Mark m2
+        WHERE m2.subject_id = m.subject_id
+    );
+
+| student_id | student_name     | subject_id | subject_name            | exam_type | exam_date  | marks |
+| ---------- | ---------------- | ---------- | ----------------------- | --------- | ---------- | ----- |
+| 102        | Mary Jane        | 201        | Database Systems        | Mid       | 2024-03-10 | 95    |
+| 102        | Mary Jane        | 202        | Operating Systems       | Final     | 2024-05-11 | 89    |
+| 104        | Natasha Romanoff | 203        | Machine Design          | Final     | 2024-05-12 | 81    |
+| 105        | Bruce Wayne      | 205        | Digital Electronics     | Mid       | 2024-03-14 | 98    |
+| 105        | Bruce Wayne      | 206        | Signals and Systems     | Final     | 2024-05-14 | 94    |
+| 109        | Tony Stark       | 201        | Database Systems        | Final     | 2024-05-10 | 99    |
+| 109        | Tony Stark       | 210        | Artificial Intelligence | Mid       | 2024-03-20 | 97    |
+| 114        | Jean Grey        | 208        | Linear Algebra          | Mid       | 2024-03-18 | 90    |
+
+---
+**Query #47**
+
+    -- 47. Find departments whose average staff salary is higher than overall average salary.
+    SELECT
+        d.department_id,
+        d.department_name,
+        AVG(st.salary) AS avg_department_salary
+    FROM Department d
+    JOIN Staff st
+        ON d.department_id = st.department_id
+    GROUP BY d.department_id, d.department_name
+    HAVING AVG(st.salary) > (
+        SELECT AVG(salary)
+        FROM Staff
+        WHERE salary IS NOT NULL
+    );
+
+| department_id | department_name  | avg_department_salary |
+| ------------- | ---------------- | --------------------- |
+| 1             | Computer Science | 88500.0               |
+| 3             | Electronics      | 99000.0               |
+| 4             | Civil            | 120000.0              |
+
+---
+**Query #48**
+
+    -- 48. Display students who scored above department average marks.
+    SELECT
+        s.student_id,
+        s.student_name,
+        s.department_id,
+        AVG(m.marks) AS student_avg_marks
+    FROM Student s
+    JOIN Mark m
+        ON s.student_id = m.student_id
+    GROUP BY s.student_id, s.student_name, s.department_id
+    HAVING AVG(m.marks) > (
+        SELECT AVG(m2.marks)
+        FROM Student s2
+        JOIN Mark m2
+            ON s2.student_id = m2.student_id
+        WHERE s2.department_id = s.department_id
+    );
+
+| student_id | student_name     | department_id | student_avg_marks |
+| ---------- | ---------------- | ------------- | ----------------- |
+| 102        | Mary Jane        | 1             | 92.0              |
+| 104        | Natasha Romanoff | 2             | 81.0              |
+| 105        | Bruce Wayne      | 3             | 96.0              |
+| 109        | Tony Stark       | 1             | 98.0              |
+| 110        | Wanda Maximoff   | 5             | 71.0              |
+
+---
+**Query #49**
+
+    -- 49. Find the nth highest mark (3rd highest) using DENSE_RANK().
+    SELECT marks
+    FROM (
+        SELECT DISTINCT
+            marks,
+            DENSE_RANK() OVER (
+                ORDER BY marks DESC
+            ) AS dr
+        FROM Mark
+        WHERE marks IS NOT NULL
+    ) t
+    WHERE dr = 3;
+
+| marks |
+| ----- |
+| 97    |
+
+---
+**Query #50**
+
+    -- 50. Generate a report showing student name, department, subject, exam type, marks, department average, and overall rank.
+    SELECT
+        s.student_name,
+        d.department_name,
+        sub.subject_name,
+        m.exam_type,
+        m.exam_date,
+        m.marks,
+        AVG(m.marks) OVER (
+            PARTITION BY s.department_id
+        ) AS department_avg,
+        RANK() OVER (
+            ORDER BY m.marks DESC
+        ) AS overall_rank
+    FROM Mark m
+    JOIN Student s
+        ON m.student_id = s.student_id
+    LEFT JOIN Department d
+        ON s.department_id = d.department_id
+    LEFT JOIN Subject sub
+        ON m.subject_id = sub.subject_id;
+
+| student_name     | department_name  | subject_name            | exam_type | exam_date  | marks | department_avg | overall_rank |
+| ---------------- | ---------------- | ----------------------- | --------- | ---------- | ----- | -------------- | ------------ |
+| Tony Stark       | Computer Science | Database Systems        | Final     | 2024-05-10 | 99    | 90.5714        | 1            |
+| Bruce Wayne      | Electronics      | Digital Electronics     | Mid       | 2024-03-14 | 98    | 76.75          | 2            |
+| Tony Stark       | Computer Science | Artificial Intelligence | Mid       | 2024-03-20 | 97    | 90.5714        | 3            |
+| Mary Jane        | Computer Science | Database Systems        | Mid       | 2024-03-10 | 95    | 90.5714        | 4            |
+| Bruce Wayne      | Electronics      | Signals and Systems     | Final     | 2024-05-14 | 94    | 76.75          | 5            |
+| John Doe         | Computer Science | Database Systems        | Final     | 2024-05-10 | 91    | 90.5714        | 6            |
+| Jean Grey        |                  | Linear Algebra          | Mid       | 2024-03-18 | 90    | 90.0           | 7            |
+| Mary Jane        | Computer Science | Operating Systems       | Final     | 2024-05-11 | 89    | 90.5714        | 8            |
+| John Doe         | Computer Science | Database Systems        | Mid       | 2024-03-10 | 88    | 90.5714        | 9            |
+| Diana Prince     | Civil            | Structural Engineering  | Mid       | 2024-03-16 | 87    | 87.0           | 10           |
+| Natasha Romanoff | Mechanical       | Machine Design          | Final     | 2024-05-12 | 81    | 73.0           | 11           |
+| John Doe         | Computer Science | Operating Systems       | Mid       | 2024-03-11 | 75    | 90.5714        | 12           |
+| Logan Howlett    | Biotechnology    |                         | Final     | 2024-05-22 | 73    | 73.0           | 13           |
+| Steve Rogers     | Mechanical       | Thermodynamics          | Final     | 2024-05-12 | 72    | 73.0           | 14           |
+| Wanda Maximoff   | Mathematics      | Linear Algebra          | Mid       | 2024-03-18 | 71    | 68.0           | 15           |
+| Steve Rogers     | Mechanical       | Machine Design          | Mid       | 2024-03-09 | 66    | 73.0           | 16           |
+| Barry Allen      | Mathematics      | Linear Algebra          | Final     | 2024-05-18 | 65    | 68.0           | 17           |
+| Clark Kent       | Electronics      | Signals and Systems     | Final     | 2024-05-14 | 61    | 76.75          | 18           |
+| Clark Kent       | Electronics      | Digital Electronics     | Mid       | 2024-03-14 | 54    | 76.75          | 19           |
+| Scott Lang       |                  | Artificial Intelligence | Final     | 2024-05-20 | 44    | 44.0           | 20           |
+| Peter Parker     | Civil            | Structural Engineering  | Final     | 2024-05-16 |       | 87.0           | 21           |
+|                  |                  |                         | Mid       | 2024-03-21 |       | 44.0           | 21           |
+
+---
+
+
