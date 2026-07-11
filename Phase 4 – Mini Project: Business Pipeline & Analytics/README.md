@@ -204,7 +204,3 @@ This project demonstrates practical knowledge of:
 - Window Functions
 - Business Reporting
 - Data Engineering Fundamentals
-
-## License
-
-This project is developed for educational purposes and to demonstrate practical Data Engineering concepts using PySpark and Databricks.
